@@ -8,7 +8,7 @@ public class UserTest {
     void userShouldHaveBasicProperties() {
         // Arrange
         String email = "test@example.com";
-        String password = "password";
+        String password = "Password123";
 
         // Act
         User user = new User(email, password);

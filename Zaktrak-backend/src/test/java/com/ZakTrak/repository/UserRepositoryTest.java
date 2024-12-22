@@ -1,5 +1,7 @@
 package com.ZakTrak.repository;
+import com.ZakTrak.model.User;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
@@ -11,16 +13,21 @@ public class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
+    @BeforeEach
+    void setUp() {
+        userRepository.deleteAll();
+    }
+    
     @Test
     void shouldSaveandFindUserByEmail() {
         // Arrange
         String email = "test@example.com";
-        String password = "password";
+        String password = "Password123";
         User user = new User(email, password);
 
         // Act
         userRepository.save(user);
-        user foundUser = userRepository.findByEmail(email);
+        User foundUser = userRepository.findByEmail(email);
 
         // Assert
         assertEquals(email, foundUser.getEmail(), "Email should match the provided value");

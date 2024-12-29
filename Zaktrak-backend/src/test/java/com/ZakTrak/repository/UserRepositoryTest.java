@@ -33,4 +33,5 @@ public class UserRepositoryTest {
         assertEquals(email, foundUser.getEmail(), "Email should match the provided value");
         assertThat(foundUser).isNotNull();
     }
+
 }

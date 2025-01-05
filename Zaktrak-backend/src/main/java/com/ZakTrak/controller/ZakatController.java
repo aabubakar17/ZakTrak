@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 import java.math.BigDecimal;
 
@@ -15,8 +17,8 @@ public class ZakatController {
 
     private final ZakatService zakatService;
 
-    @GetMapping("/calculate")
-    public BigDecimal calculateZakat() {
-        return zakatService.calculateZakat();
+    @GetMapping("/calculate/{type}")
+    public BigDecimal calculateZakat(@PathVariable String type) {
+        return zakatService.calculateZakat(type);
     }
 }

@@ -25,7 +25,10 @@ public class ProtectedControllerTest {
     void shouldReturnUserDetailsForAuthenticatedUser() {
         // Arrange
         String email = "test@example.com";
-        User user = new User(email, "Password123");
+        String password = "Password123";
+        String firstName = "Test";
+        String lastName = "User";
+        User user = new User(email, password, firstName, lastName);
         when(userService.getCurrentUser()).thenReturn(user);
 
         // Act

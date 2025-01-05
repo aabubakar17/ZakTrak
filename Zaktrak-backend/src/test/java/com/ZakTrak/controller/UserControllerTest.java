@@ -37,7 +37,9 @@ public class UserControllerTest {
         String email = "test@example.com";
         String password = "Password123";
         String jwtToken = "jwt";
-        NewUserRequest request = new NewUserRequest(email, password);
+        String firstName = "Test";
+        String lastName = "User";
+        NewUserRequest request = new NewUserRequest(email, password, firstName, lastName);
         AuthenticationResponse response = new AuthenticationResponse(jwtToken);
         when(userService.createUser(request)).thenReturn(response);
         // Act

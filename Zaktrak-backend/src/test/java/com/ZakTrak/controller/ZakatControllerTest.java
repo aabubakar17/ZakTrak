@@ -27,17 +27,16 @@ public class ZakatControllerTest {
 
     @Test
     @WithMockUser
-    void shouldCalculateZakat() throws Exception {
-        when(zakatService.calculateZakat())
-                .thenReturn(new BigDecimal("250.00"));
+    void shouldReturnZakatAmount() throws Exception {
+        // Arrange
+        String type = "gold";
+        BigDecimal zakatAmount = new BigDecimal("100.0");
+        when(zakatService.calculateZakat(type)).thenReturn(zakatAmount);
 
-        mockMvc.perform(get("/api/zakat/calculate"))
+        // Act & Assert
+        mockMvc.perform(get("/api/zakat/calculate/{type}", type))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("250.0"));
+                .andExpect(jsonPath("$").value(zakatAmount));
     }
-
-
-
-
 
 }

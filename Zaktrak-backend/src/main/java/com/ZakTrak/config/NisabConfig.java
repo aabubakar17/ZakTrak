@@ -21,8 +21,8 @@ public class NisabConfig {
         return args -> {
             if (nisabRepository.count() == 0) {
                 Nisab defaultNisab = new Nisab(
-                        new BigDecimal("800.00"), // Default gold price
-                        new BigDecimal("15.00"),  // Default silver price
+                        new BigDecimal("85.00"), // Default gold price
+                        new BigDecimal("0.95"),  // Default silver price
                         LocalDate.now()
                 );
                 nisabRepository.save(defaultNisab);

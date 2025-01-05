@@ -14,12 +14,16 @@ public class User {
     @Indexed(unique = true)
     private String email;
     private String password;
+    private String firstName;
+    private String lastName;
 
-    public User(String email, String password) {
+    public User(String email, String password, String firstName, String lastName) {
         validateEmail(email);
         validatePassword(password);
         this.email = email;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     private void validateEmail(String email) {

@@ -34,12 +34,12 @@ class ZakatServiceTest {
 
         when(nisabService.getLatestNisabThreshold())
                 .thenReturn(new Nisab(
-                        new BigDecimal("800.00"),
-                        new BigDecimal("15.00"),
+                        new BigDecimal("85.00"),
+                        new BigDecimal("0.95"),
                         LocalDate.now()
                 ));
 
-        BigDecimal zakatDue = zakatService.calculateZakat();
+        BigDecimal zakatDue = zakatService.calculateZakat("gold");
 
         assertThat(zakatDue).isEqualByComparingTo(new BigDecimal("250.00")); // 2.5% of 10000
     }
@@ -56,7 +56,7 @@ class ZakatServiceTest {
                         LocalDate.now()
                 ));
 
-        BigDecimal zakatDue = zakatService.calculateZakat();
+        BigDecimal zakatDue = zakatService.calculateZakat("gold");
 
         assertThat(zakatDue).isEqualByComparingTo(BigDecimal.ZERO);
     }

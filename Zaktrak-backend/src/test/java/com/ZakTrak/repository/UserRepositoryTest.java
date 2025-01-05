@@ -23,7 +23,9 @@ public class UserRepositoryTest {
         // Arrange
         String email = "test@example.com";
         String password = "Password123";
-        User user = new User(email, password);
+        String firstName = "Test";
+        String lastName = "User";
+        User user = new User(email, password, firstName, lastName);
 
         // Act
         userRepository.save(user);
@@ -31,6 +33,9 @@ public class UserRepositoryTest {
 
         // Assert
         assertEquals(email, foundUser.getEmail(), "Email should match the provided value");
+        assertEquals(password, foundUser.getPassword(), "Password should match the provided value");
+        assertEquals(firstName, foundUser.getFirstName(), "First name should match the provided value");
+        assertEquals(lastName, foundUser.getLastName(), "Last name should match the provided value");
         assertThat(foundUser).isNotNull();
     }
 

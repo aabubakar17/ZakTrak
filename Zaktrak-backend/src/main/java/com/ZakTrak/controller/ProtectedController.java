@@ -16,6 +16,6 @@ public class ProtectedController {
     @GetMapping("/")
     public UserInfo getUserInfo() {
         User user = userService.getCurrentUser();
-        return new UserInfo(user.getEmail());
+        return new UserInfo(user.getEmail(), user.getFirstName(), user.getLastName());
     }
 }

@@ -42,8 +42,10 @@ class AuthenticationServiceTest {
         String email = "test@example.com";
         String password = "Password123";
         String token = "generated.jwt.token";
+        String firstName = "Test";
+        String lastName = "User";
 
-        User user = new User(email, password);
+        User user = new User(email, password, firstName, lastName);
         AuthenticationRequest request = new AuthenticationRequest(email, password);
 
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))

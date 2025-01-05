@@ -61,8 +61,11 @@ public class UserServiceTest {
         String email = "test@example.com";
         String rawPassword = "Password123";
         String encodedPassword = "encodedPassword123";
-        NewUserRequest request = new NewUserRequest(email, rawPassword);
-        User user = new User(request.email(), request.password());
+        String firstName = "Test";
+        String lastName = "User";
+
+        NewUserRequest request = new NewUserRequest(email, rawPassword, firstName, lastName);
+        User user = new User(request.email(), request.password(), request.firstName(), request.lastName());
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(passwordEncoder.encode(rawPassword)).thenReturn(encodedPassword);
         when(jwtService.generateToken(user)).thenReturn("token");
@@ -80,9 +83,11 @@ public class UserServiceTest {
         // Arrange
         String email = "test@example.com";
         String password = "Password123";
-        NewUserRequest request = new NewUserRequest(email, password);
+        String firstName = "Test";
+        String lastName = "User";
+        NewUserRequest request = new NewUserRequest(email, password, firstName, lastName);
 
-        when(userRepository.findByEmail(email)).thenReturn(new User(request.email(), request.password()));
+        when(userRepository.findByEmail(email)).thenReturn(new User(request.email(), request.password(), request.firstName(), request.lastName()));
 
         // Act & Assert
         IllegalStateException exception = assertThrows(
@@ -101,8 +106,10 @@ public class UserServiceTest {
         String email = "test@example.com";
         String rawPassword = "Password123";
         String encodedPassword = "encodedPassword123";
+        String firstName = "Test";
+        String lastName = "User";
 
-        NewUserRequest request = new NewUserRequest(email, rawPassword);
+        NewUserRequest request = new NewUserRequest(email, rawPassword, firstName, lastName);
 
 
         when(passwordEncoder.encode(rawPassword)).thenReturn(encodedPassword);
@@ -122,7 +129,11 @@ public class UserServiceTest {
     void shouldReturnCurrentUser() {
         // Arrange
         String email = "test@example.com";
-        User expectedUser = new User(email, "Password123");
+        String password = "Password123";
+        String firstName = "Test";
+        String lastName = "User";
+        User expectedUser = new User(email, password, firstName, lastName);
+
 
         UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
                 .username(email)

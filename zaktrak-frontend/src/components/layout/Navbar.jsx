@@ -47,7 +47,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link href="/" className="flex items-center flex-shrink-0">
             <img
-              className="w-auto h-32" // Adjusted height
+              className="w-auto h-40" // Adjusted height
               src="/ZakTrak-logo.png"
               alt="ZakTrak Logo"
             />

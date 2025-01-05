@@ -31,8 +31,8 @@ const features = [
 
 const Features = () => {
   return (
-    <div className="bg-slate py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <div className="bg-slate bg-opacity-5 py-16">
+      <div className="mx-auto max-w-7xl pb-10 px-6 lg:px-2">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
             Everything You Need to Manage Your Zakat

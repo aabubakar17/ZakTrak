@@ -10,9 +10,9 @@ import { useRouter } from "next/navigation";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { set } from "react-hook-form";
 import Joyride, { STATUS } from "react-joyride";
 import ZakatCharities from "@/components/ZakatCharities";
+import { LoadingSpinner } from "@/components/loading";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -32,6 +32,7 @@ export default function DashboardPage() {
     GOLD_AND_SILVER: 0,
     BUSINESS_ASSETS: 0,
   });
+  const [isLoading, setIsLoading] = useState(true);
 
   const tourSteps = [
     {
@@ -82,6 +83,7 @@ export default function DashboardPage() {
   }, [nisabType]);
 
   const loadDashboardData = async () => {
+    setIsLoading(true);
     try {
       const [
         calculateResponse,
@@ -123,6 +125,8 @@ export default function DashboardPage() {
       setAssetSummary(summary);
     } catch (error) {
       console.error("Error loading dashboard data:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -136,7 +140,8 @@ export default function DashboardPage() {
     : 0;
 
   return (
-    <div className="max-w-7xl mx-auto p-2 space-y-6">
+    <div className="max-w-sm md:max-w-7xl   p-2 space-y-6">
+      {isLoading && <LoadingSpinner />}
       {/* Header Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="flex justify-between items-center mb-6">

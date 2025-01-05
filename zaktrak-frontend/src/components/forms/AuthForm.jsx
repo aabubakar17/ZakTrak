@@ -117,10 +117,10 @@ const AuthForm = ({ type = "login" }) => {
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
-        <CardTitle>
+        <CardTitle className="text-2xl font-semibold">
           {type === "login" ? "Welcome Back" : "Create Account"}
         </CardTitle>
-        <CardDescription>
+        <CardDescription className="text-md text-slate-600">
           {type === "login"
             ? "Enter your credentials to access your account"
             : "Sign up to start tracking your zakat"}

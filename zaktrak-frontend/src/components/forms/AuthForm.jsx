@@ -21,15 +21,11 @@ const AuthForm = ({ type = "login" }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [serverError, setServerError] = useState("");
+  const [errors, setErrors] = useState({});
 
   const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-  });
-
-  const [errors, setErrors] = useState({
-    fullName: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
   });
@@ -72,40 +68,44 @@ const AuthForm = ({ type = "login" }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!validateForm()) return;
-
     setIsLoading(true);
     setServerError("");
 
     try {
       if (type === "login") {
-        const response = await authAPI.login(formData);
-        // Store user info after successful login
+        const response = await authAPI.login({
+          email: formData.email,
+          password: formData.password,
+        });
         localStorage.setItem(
           "user",
           JSON.stringify({
             email: formData.email,
-            fullName: response?.fullName,
+            firstName: response.firstName,
+            lastName: response.lastName,
           })
         );
       } else {
-        await authAPI.register(formData);
-        // After registration, login the user
+        await authAPI.register({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          password: formData.password,
+        });
+        // After registration, log them in
         const loginResponse = await authAPI.login({
           email: formData.email,
           password: formData.password,
         });
-        // Store user info after successful registration and login
         localStorage.setItem(
           "user",
           JSON.stringify({
             email: formData.email,
-            fullName: formData.fullName,
+            firstName: formData.firstName,
+            lastName: formData.lastName,
           })
         );
       }
-
       router.push("/dashboard");
     } catch (error) {
       setServerError(error.message);
@@ -135,21 +135,40 @@ const AuthForm = ({ type = "login" }) => {
           )}
 
           {type === "register" && (
-            <div className="space-y-2">
-              <Label htmlFor="fullName">Full Name</Label>
-              <Input
-                id="fullName"
-                name="fullName"
-                placeholder="John Doe"
-                value={formData.fullName}
-                onChange={handleChange}
-                className={errors.fullName ? "border-red-500" : ""}
-                disabled={isLoading}
-              />
-              {errors.fullName && (
-                <p className="text-sm text-red-500">{errors.fullName}</p>
-              )}
-            </div>
+            <>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="firstName">First Name</Label>
+                  <Input
+                    id="firstName"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        firstName: e.target.value,
+                      }))
+                    }
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="lastName">Last Name</Label>
+                  <Input
+                    id="lastName"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        lastName: e.target.value,
+                      }))
+                    }
+                    required
+                  />
+                </div>
+              </div>
+            </>
           )}
 
           <div className="space-y-2">
@@ -158,15 +177,15 @@ const AuthForm = ({ type = "login" }) => {
               id="email"
               name="email"
               type="email"
-              placeholder="you@example.com"
+              required
               value={formData.email}
-              onChange={handleChange}
-              className={errors.email ? "border-red-500" : ""}
-              disabled={isLoading}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  email: e.target.value,
+                }))
+              }
             />
-            {errors.email && (
-              <p className="text-sm text-red-500">{errors.email}</p>
-            )}
           </div>
 
           <div className="space-y-2">
@@ -175,15 +194,16 @@ const AuthForm = ({ type = "login" }) => {
               id="password"
               name="password"
               type="password"
-              placeholder="Enter your password"
+              required
+              minLength={8}
               value={formData.password}
-              onChange={handleChange}
-              className={errors.password ? "border-red-500" : ""}
-              disabled={isLoading}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  password: e.target.value,
+                }))
+              }
             />
-            {errors.password && (
-              <p className="text-sm text-red-500">{errors.password}</p>
-            )}
           </div>
         </CardContent>
 

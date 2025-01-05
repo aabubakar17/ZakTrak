@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -206,4 +207,44 @@ class AssetServiceTest {
                 "No assets found for the given type"
         );
     }
+
+    @Test
+    void shouldDeleteAssetById() {
+        // Arrange
+        String assetId = "123";
+         // Ensure authenticatedUser is stubbed
+        Asset asset = new Asset(
+                authenticatedUser.getId(),
+                AssetType.CASH_AND_SAVINGS,
+                new BigDecimal("100.00"),
+                "test",
+                true,
+                LocalDateTime.now()
+        );
+
+        when(assetRepository.findByIdAndUserId(assetId, authenticatedUser.getId()))
+                .thenReturn(Optional.of(asset));
+
+        // Act
+        assetService.deleteAssetById(assetId);
+
+        // Assert
+        verify(assetRepository).delete(asset);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenDeletingNonExistentAsset() {
+        // Arrange
+        String assetId = "123";
+        // Ensure authenticatedUser is stubbed
+        when(assetRepository.findByIdAndUserId(assetId, authenticatedUser.getId()))
+                .thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class,
+                () -> assetService.deleteAssetById(assetId),
+                "Expected exception when deleting a non-existent asset"
+        );
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.ZakTrak.service;
 
+import com.ZakTrak.dto.UpdatePaymentRequest;
 import com.ZakTrak.model.ZakatPayment;
 import com.ZakTrak.repository.ZakatPaymentRepository;
 import com.ZakTrak.model.User;
@@ -15,11 +16,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.*;
+
 
 @ExtendWith(MockitoExtension.class)
 class ZakatPaymentServiceTest {
@@ -157,5 +159,54 @@ class ZakatPaymentServiceTest {
 
         // Assert
         assertThat(remaining).isEqualByComparingTo(BigDecimal.ZERO);
+    }
+
+    @Test
+    void shouldDeletePayment() {
+        // Arrange
+        String paymentId = "123";
+        String userId = "user123";
+        User mockUser = mock(User.class);
+        ZakatPayment payment = new ZakatPayment(userId, new BigDecimal("100.00"),
+                LocalDate.now(), "test");
+
+        when(userService.getCurrentUser()).thenReturn(mockUser);
+        when(mockUser.getId()).thenReturn(userId);
+        when(zakatPaymentRepository.findByIdAndUserId(paymentId, userId))
+                .thenReturn(Optional.of(payment));
+
+        // Act
+        zakatPaymentService.deletePayment(paymentId);
+
+        // Assert
+        verify(zakatPaymentRepository).delete(payment);
+    }
+
+    @Test
+    void shouldUpdatePayment() {
+        // Arrange
+        String paymentId = "123";
+        String userId = "user123";
+        User mockUser = mock(User.class);
+        ZakatPayment payment = new ZakatPayment(userId, new BigDecimal("100.00"),
+                LocalDate.now(), "test");
+        BigDecimal newAmount = new BigDecimal("150.00");
+        String newDescription = "updated";
+
+        UpdatePaymentRequest request = new UpdatePaymentRequest(newAmount, newDescription);
+
+        when(userService.getCurrentUser()).thenReturn(mockUser);
+        when(mockUser.getId()).thenReturn(userId);
+        when(zakatPaymentRepository.findByIdAndUserId(paymentId, userId))
+                .thenReturn(Optional.of(payment));
+        when(zakatPaymentRepository.save(any(ZakatPayment.class))).thenReturn(payment);
+
+        // Act
+        ZakatPayment updatedPayment = zakatPaymentService.updatePayment(paymentId, request);
+
+        // Assert
+        assertThat(updatedPayment.getAmount()).isEqualTo(request.amount());
+        assertThat(updatedPayment.getDescription()).isEqualTo(request.description());
+        verify(zakatPaymentRepository).save(payment);
     }
 }

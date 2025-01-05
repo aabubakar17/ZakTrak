@@ -1,5 +1,6 @@
 package com.ZakTrak.service;
 
+import com.ZakTrak.dto.UpdatePaymentRequest;
 import com.ZakTrak.model.ZakatPayment;
 import com.ZakTrak.repository.ZakatPaymentRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,22 @@ public class ZakatPaymentService {
         return zakatPaymentRepository.save(payment);
     }
 
+    public void deletePayment(String id) {
+        String userId = userService.getCurrentUser().getId();
+        ZakatPayment payment = zakatPaymentRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new IllegalArgumentException("Payment not found or access denied"));
+        zakatPaymentRepository.delete(payment);
+    }
+
+    public ZakatPayment updatePayment(String id, UpdatePaymentRequest request) {
+        String userId = userService.getCurrentUser().getId();
+        ZakatPayment payment = zakatPaymentRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new IllegalArgumentException("Payment not found or access denied"));
+
+        payment.updateAmount(request.amount());
+        payment.updateDescription(request.description());
+        return zakatPaymentRepository.save(payment);
+    }
 
     public BigDecimal getTotalPaymentsForCurrentYear() {
         String userId = userService.getCurrentUser().getId();

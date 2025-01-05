@@ -7,9 +7,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ZakTrak.dto.NewAssetRequest;
 
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -69,6 +71,15 @@ public class AssetService {
 
         assetRepository.deleteAll(assets);
     }
+
+
+    public void deleteAssetById(String id) {
+        String userId = userService.getCurrentUser().getId();
+        Asset asset = assetRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new IllegalArgumentException("Asset not found or access denied"));
+        assetRepository.delete(asset);
+    }
+
 
 
     public BigDecimal calculateTotalZakatableValue() {

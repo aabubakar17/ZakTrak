@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,38 +13,48 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
+import { authAPI } from "@/lib/api";
 
 const AuthForm = ({ type = "login" }) => {
-  // Form state
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [serverError, setServerError] = useState("");
+
   const [formData, setFormData] = useState({
+    fullName: "",
     email: "",
     password: "",
-    name: "",
   });
 
-  // Email validation in real-time
-  const [emailError, setEmailError] = useState("");
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email) {
-      setEmailError("Email is required");
-    } else if (!emailRegex.test(email)) {
-      setEmailError("Please enter a valid email address");
-    } else {
-      setEmailError("");
-    }
-  };
+  const [errors, setErrors] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+  });
 
-  // Password validation in real-time
-  const [passwordError, setPasswordError] = useState("");
-  const validatePassword = (password) => {
-    if (!password) {
-      setPasswordError("Password is required");
-    } else if (password.length < 8) {
-      setPasswordError("Password must be at least 8 characters long");
-    } else {
-      setPasswordError("");
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (type === "register" && !formData.fullName) {
+      newErrors.fullName = "Full name is required";
     }
+
+    if (!formData.email) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+    } else if (formData.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters long";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleChange = (e) => {
@@ -52,23 +63,54 @@ const AuthForm = ({ type = "login" }) => {
       ...prev,
       [name]: value,
     }));
-
-    if (name === "email") validateEmail(value);
-    if (name === "password") validatePassword(value);
+    setServerError("");
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    validateEmail(formData.email);
-    validatePassword(formData.password);
+    if (!validateForm()) return;
 
-    if (!emailError && !passwordError) {
-      // Here you would typically make an API call to your backend
-      console.log("Form submitted:", formData);
-      // After successful authentication, redirect to dashboard
-      // window.location.href = '/dashboard'
+    setIsLoading(true);
+    setServerError("");
+
+    try {
+      if (type === "login") {
+        const response = await authAPI.login(formData);
+        // Store user info after successful login
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            email: formData.email,
+            fullName: response?.fullName,
+          })
+        );
+      } else {
+        await authAPI.register(formData);
+        // After registration, login the user
+        const loginResponse = await authAPI.login({
+          email: formData.email,
+          password: formData.password,
+        });
+        // Store user info after successful registration and login
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            email: formData.email,
+            fullName: formData.fullName,
+          })
+        );
+      }
+
+      router.push("/dashboard");
+    } catch (error) {
+      setServerError(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -86,22 +128,30 @@ const AuthForm = ({ type = "login" }) => {
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
-          {/* Name field - only shown for registration */}
-          {type === "register" && (
-            <div className="space-y-2">
-              <Label htmlFor="name">Name (Optional)</Label>
-              <Input
-                id="name"
-                name="name"
-                type="text"
-                placeholder="Your name"
-                value={formData.name}
-                onChange={handleChange}
-              />
+          {serverError && (
+            <div className="p-3 text-sm text-red-500 bg-red-50 rounded-md">
+              {serverError}
             </div>
           )}
 
-          {/* Email field */}
+          {type === "register" && (
+            <div className="space-y-2">
+              <Label htmlFor="fullName">Full Name</Label>
+              <Input
+                id="fullName"
+                name="fullName"
+                placeholder="John Doe"
+                value={formData.fullName}
+                onChange={handleChange}
+                className={errors.fullName ? "border-red-500" : ""}
+                disabled={isLoading}
+              />
+              {errors.fullName && (
+                <p className="text-sm text-red-500">{errors.fullName}</p>
+              )}
+            </div>
+          )}
+
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -111,12 +161,14 @@ const AuthForm = ({ type = "login" }) => {
               placeholder="you@example.com"
               value={formData.email}
               onChange={handleChange}
-              className={emailError ? "border-red-500" : ""}
+              className={errors.email ? "border-red-500" : ""}
+              disabled={isLoading}
             />
-            {emailError && <p className="text-sm text-red-500">{emailError}</p>}
+            {errors.email && (
+              <p className="text-sm text-red-500">{errors.email}</p>
+            )}
           </div>
 
-          {/* Password field */}
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
             <Input
@@ -126,10 +178,11 @@ const AuthForm = ({ type = "login" }) => {
               placeholder="Enter your password"
               value={formData.password}
               onChange={handleChange}
-              className={passwordError ? "border-red-500" : ""}
+              className={errors.password ? "border-red-500" : ""}
+              disabled={isLoading}
             />
-            {passwordError && (
-              <p className="text-sm text-red-500">{passwordError}</p>
+            {errors.password && (
+              <p className="text-sm text-red-500">{errors.password}</p>
             )}
           </div>
         </CardContent>
@@ -138,8 +191,18 @@ const AuthForm = ({ type = "login" }) => {
           <Button
             type="submit"
             className="w-full bg-emerald-600 hover:bg-emerald-700"
+            disabled={isLoading}
           >
-            {type === "login" ? "Sign In" : "Create Account"}
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                {type === "login" ? "Signing in..." : "Creating account..."}
+              </>
+            ) : type === "login" ? (
+              "Sign In"
+            ) : (
+              "Create Account"
+            )}
           </Button>
 
           <p className="text-sm text-slate-600 text-center">

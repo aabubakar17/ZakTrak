@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+
 
 @Repository
 public interface ZakatPaymentRepository extends MongoRepository<ZakatPayment, String> {
@@ -29,4 +31,8 @@ public interface ZakatPaymentRepository extends MongoRepository<ZakatPayment, St
             LocalDate startDate,
             LocalDate endDate
     );
+
+    void deleteByUserId(String userId);
+
+    Optional<ZakatPayment> findByIdAndUserId(String id, String userId);
 }

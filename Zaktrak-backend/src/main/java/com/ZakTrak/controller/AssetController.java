@@ -47,6 +47,13 @@ public class AssetController {
         assetService.deleteAsset(type);
     }
 
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAssetById(@PathVariable String id) {
+        assetService.deleteAssetById(id);
+    }
+
+
     // Optional: Add endpoint to calculate total zakatable value
     @GetMapping("/zakatable/total")
     public BigDecimal getTotalZakatableValue() {

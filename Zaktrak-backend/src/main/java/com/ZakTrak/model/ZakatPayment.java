@@ -42,4 +42,15 @@ public class ZakatPayment {
             throw new IllegalArgumentException("Payment date cannot be in the future");
         }
     }
+
+    public void updateAmount(BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Amount must be greater than zero");
+        }
+        this.amount = amount;
+    }
+
+    public void updateDescription(String description) {
+        this.description = description;
+    }
 }

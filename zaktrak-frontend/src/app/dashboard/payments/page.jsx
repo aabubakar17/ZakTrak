@@ -2,7 +2,12 @@
 
 import { useState, useEffect } from "react";
 import api from "@/lib/api";
-import { Card } from "@/components/ui/card";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -89,7 +94,7 @@ export default function PaymentsPage() {
                 setEditingPayment(null);
                 setFormData({ amount: "", description: "" });
               }}
-              className="bg-emerald-600 hover:bg-emerald-700"
+              className="flex-left bg-emerald-600 hover:bg-emerald-700"
             >
               <Plus className="h-4 w-4 mr-2" />
               Record Payment
@@ -106,7 +111,7 @@ export default function PaymentsPage() {
                 <Label>Amount</Label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">
-                    $
+                    £
                   </span>
                   <Input
                     type="number"
@@ -152,51 +157,52 @@ export default function PaymentsPage() {
           </DialogContent>
         </Dialog>
       </div>
-
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Date</TableHead>
-            <TableHead>Amount</TableHead>
-            <TableHead>Description</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {payments.map((payment) => (
-            <TableRow key={payment.id}>
-              <TableCell>{payment.paymentDate}</TableCell>
-              <TableCell className="font-medium">
-                £{payment.amount.toLocaleString()}
-              </TableCell>
-              <TableCell>{payment.description}</TableCell>
-              <TableCell className="space-x-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => {
-                    setEditingPayment(payment);
-                    setFormData({
-                      amount: payment.amount.toString(),
-                      description: payment.description,
-                    });
-                    setIsDialogOpen(true);
-                  }}
-                >
-                  <Pencil className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleDelete(payment.id)}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </TableCell>
+      <Card className="p-4">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Date</TableHead>
+              <TableHead>Amount</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {payments.map((payment) => (
+              <TableRow key={payment.id}>
+                <TableCell>{payment.paymentDate}</TableCell>
+                <TableCell className="font-medium">
+                  £{payment.amount.toLocaleString()}
+                </TableCell>
+                <TableCell>{payment.description}</TableCell>
+                <TableCell className="space-x-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => {
+                      setEditingPayment(payment);
+                      setFormData({
+                        amount: payment.amount.toString(),
+                        description: payment.description,
+                      });
+                      setIsDialogOpen(true);
+                    }}
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => handleDelete(payment.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Card>
     </div>
   );
 }

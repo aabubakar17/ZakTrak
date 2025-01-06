@@ -25,7 +25,7 @@ const charities = [
     description:
       "Focused on delivering life-saving aid, reaching over 19 million Muslims",
     logo: "/charity-right-logo.png",
-    website: "https://charityright.org.uk/zakat/",
+    website: "https://matwproject.org.uk/zakat",
     backgroundColor: "bg-orange-50",
   },
 

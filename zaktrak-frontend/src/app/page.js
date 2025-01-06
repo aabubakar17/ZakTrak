@@ -1,8 +1,5 @@
 import Hero from "@/components/layout/Hero";
 import Features from "@/components/layout/Features";
-import Footer from "@/components/layout/Footer";
-import { HeroScrollDemo } from "@/components/HeroScrollDemo";
-import { LampDemo } from "@/components/LampDemo";
 
 export default function Home() {
   return (

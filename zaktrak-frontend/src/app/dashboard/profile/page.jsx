@@ -7,6 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { User, Mail, Lock } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import {
+  getLocalStorage,
+  setLocalStorage,
+  removeLocalStorage,
+} from "@/lib/localStorage";
 
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
@@ -20,7 +25,7 @@ export default function ProfilePage() {
   });
 
   useEffect(() => {
-    const userData = localStorage.getItem("user");
+    const userData = getLocalStorage("user");
     if (userData) {
       const parsedUser = JSON.parse(userData);
       setUser(parsedUser);

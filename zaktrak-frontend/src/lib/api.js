@@ -1,4 +1,9 @@
 import axios from "axios";
+import {
+  getLocalStorage,
+  setLocalStorage,
+  removeLocalStorage,
+} from "./localStorage";
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -9,7 +14,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
+    const token = getLocalStorage("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -25,8 +30,8 @@ api.interceptors.response.use(
   (error) => {
     if (error.response) {
       if (error.response.status === 401) {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+        removeLocalStorage("token");
+        removeLocalStorage("user");
         window.location.href = "/login";
       }
       throw new Error(error.response.data.message || "An error occurred");
@@ -43,7 +48,7 @@ export const authAPI = {
     try {
       const response = await api.post("/user/login", credentials);
       if (response.token) {
-        localStorage.setItem("token", response.token);
+        setLocalStorage("token", response.token);
       }
       return response;
     } catch (error) {
@@ -61,15 +66,16 @@ export const authAPI = {
   },
 
   logout: () => {
-    localStorage.removeItem("token");
+    removeLocalStorage("token");
+    removeLocalStorage("user");
   },
 
   isAuthenticated: () => {
-    return !!localStorage.getItem("token");
+    return !!getLocalStorage("token");
   },
 
   getUser: () => {
-    return JSON.parse(localStorage.getItem("user"));
+    return JSON.parse(getLocalStorage("user"));
   },
 };
 

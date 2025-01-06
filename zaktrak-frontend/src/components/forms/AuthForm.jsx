@@ -16,6 +16,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { authAPI } from "@/lib/api";
+import {
+  getLocalStorage,
+  setLocalStorage,
+  removeLocalStorage,
+} from "@/lib/localStorage";
 
 const AuthForm = ({ type = "login" }) => {
   const router = useRouter();
@@ -77,7 +82,7 @@ const AuthForm = ({ type = "login" }) => {
           email: formData.email,
           password: formData.password,
         });
-        localStorage.setItem(
+        setLocalStorage(
           "user",
           JSON.stringify({
             email: formData.email,
@@ -97,7 +102,7 @@ const AuthForm = ({ type = "login" }) => {
           email: formData.email,
           password: formData.password,
         });
-        localStorage.setItem(
+        setLocalStorage(
           "user",
           JSON.stringify({
             email: formData.email,

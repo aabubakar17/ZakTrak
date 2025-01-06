@@ -13,6 +13,11 @@ import { Label } from "@/components/ui/label";
 import Joyride, { STATUS } from "react-joyride";
 import ZakatCharities from "@/components/ZakatCharities";
 import { LoadingSpinner } from "@/components/loading";
+import {
+  getLocalStorage,
+  removeLocalStorage,
+  setLocalStorage,
+} from "@/lib/localStorage";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -80,7 +85,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const checkSession = () => {
-      const token = localStorage.getItem("token");
+      const token = getLocalStorage("token");
       if (!token) {
         router.push("/login");
       }
@@ -108,7 +113,7 @@ export default function DashboardPage() {
       ]);
 
       setUser(userResponse);
-      localStorage.setItem("user", JSON.stringify(userResponse));
+      setLocalStorage("user", JSON.stringify(userResponse));
 
       const totalDue = calculateResponse;
       const totalPaid = totalPaidResponse;

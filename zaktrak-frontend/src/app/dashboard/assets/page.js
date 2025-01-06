@@ -25,6 +25,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  getLocalStorage,
+  setLocalStorage,
+  removeLocalStorage,
+} from "@/lib/localStorage";
 
 const assetCategories = [
   {
@@ -62,7 +67,7 @@ export default function AssetsPage() {
 
   useEffect(() => {
     loadAssets();
-    const savedCurrency = localStorage.getItem("preferredCurrency");
+    const savedCurrency = getLocalStorage("preferredCurrency");
     if (savedCurrency) setCurrency(savedCurrency);
   }, []);
 

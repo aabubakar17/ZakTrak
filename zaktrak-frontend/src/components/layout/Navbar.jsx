@@ -12,12 +12,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useRouter, usePathname } from "next/navigation";
+import {
+  getLocalStorage,
+  setLocalStorage,
+  removeLocalStorage,
+} from "@/lib/localStorage";
 
 const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(localStorage.getItem("user").firstName);
+  const [user, setUser] = useState(getLocalStorage("user")?.firstName);
 
   useEffect(() => {
     checkAuthStatus();
@@ -27,7 +32,7 @@ const Navbar = () => {
     const isAuth = authAPI.isAuthenticated();
     setIsAuthenticated(isAuth);
     if (isAuth) {
-      const userData = localStorage.getItem("user");
+      const userData = getLocalStorage("user");
       if (userData) {
         setUser(JSON.parse(userData));
       }

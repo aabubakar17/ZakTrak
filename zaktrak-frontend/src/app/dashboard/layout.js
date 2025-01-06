@@ -26,7 +26,6 @@ export default function DashboardLayout({ children }) {
   return (
     <ProtectedRoute>
       <div className="min-h-screen flex">
-        {/* Sidebar */}
         <aside className="w-64 bg-white border-r border-slate-200">
           <nav className="p-4 space-y-2">
             {sidebarLinks.map((link) => {
@@ -50,7 +49,6 @@ export default function DashboardLayout({ children }) {
           </nav>
         </aside>
 
-        {/* Main Content */}
         <main className="flex-1 bg-slate-50">
           <div className="p-8">{children}</div>
         </main>

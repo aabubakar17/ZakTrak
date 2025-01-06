@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// Create axios instance with default config
 const api = axios.create({
   baseURL: "http://79.72.76.191:8080/api",
   headers: {
@@ -8,7 +7,6 @@ const api = axios.create({
   },
 });
 
-// Request interceptor
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -22,28 +20,25 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
     if (error.response) {
-      // Server responded with error status
       if (error.response.status === 401) {
         localStorage.removeItem("token");
-        // You might want to redirect to login page here
+        localStorage.removeItem("user");
+
+        window.location.href = "/login";
       }
       throw new Error(error.response.data.message || "An error occurred");
     } else if (error.request) {
-      // Request made but no response received
       throw new Error("No response from server");
     } else {
-      // Something happened in setting up the request
       throw new Error("Error setting up request");
     }
   }
 );
 
-// Auth functions
 export const authAPI = {
   login: async (credentials) => {
     try {
@@ -79,7 +74,6 @@ export const authAPI = {
   },
 };
 
-// Example of how to structure other API calls
 export const userAPI = {
   getProfile: () => api.get("/user/profile"),
   updateProfile: (data) => api.put("/user/profile", data),

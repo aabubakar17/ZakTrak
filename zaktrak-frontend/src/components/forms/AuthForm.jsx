@@ -92,7 +92,7 @@ const AuthForm = ({ type = "login" }) => {
           email: formData.email,
           password: formData.password,
         });
-        // After registration, log them in
+
         const loginResponse = await authAPI.login({
           email: formData.email,
           password: formData.password,

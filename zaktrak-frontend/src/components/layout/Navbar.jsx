@@ -44,15 +44,14 @@ const Navbar = () => {
     <nav className="w-full sticky top-0 bg-transparent border-b border-slate-100">
       <div className="max-w-8xl pb-4 mx-auto px-4 lg:px-8">
         <div className="flex justify-between h-16 items-center ">
-          {/* Logo */}
           <Link href="/" className="flex items-center flex-shrink-0">
             <img
-              className="w-auto h-40" // Adjusted height
+              className="w-auto h-40"
               src="/ZakTrak-logo.png"
               alt="ZakTrak Logo"
             />
           </Link>
-          {/* Auth Buttons */}
+
           <div className="flex items-center pt-4 space-x-4">
             {!isAuthenticated ? (
               <>

@@ -36,7 +36,6 @@ export default function ProfilePage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Implement update logic here
     setIsEditing(false);
   };
 
@@ -51,7 +50,6 @@ export default function ProfilePage() {
 
       <form onSubmit={handleSubmit}>
         <Card className="p-6 space-y-8">
-          {/* Personal Information */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="space-y-1">
@@ -153,7 +151,6 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Action Buttons */}
           {isEditing && (
             <div className="flex justify-end space-x-4">
               <Button

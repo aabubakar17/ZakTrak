@@ -79,8 +79,16 @@ export default function DashboardPage() {
   ];
 
   useEffect(() => {
+    const checkSession = () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        router.push("/login");
+      }
+    };
+    checkSession();
+
     loadDashboardData();
-  }, [nisabType]);
+  }, [nisabType, router]);
 
   const loadDashboardData = async () => {
     setIsLoading(true);
@@ -140,9 +148,9 @@ export default function DashboardPage() {
     : 0;
 
   return (
-    <div className="max-w-sm md:max-w-7xl   p-2 space-y-6">
+    <div className="max-w-7xl mx-auto p-6 space-y-6">
       {isLoading && <LoadingSpinner />}
-      {/* Header Section */}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="flex justify-between items-center mb-6">
           <div>
@@ -177,7 +185,6 @@ export default function DashboardPage() {
         </RadioGroup>
       </div>
 
-      {/* Nisab Alert */}
       {zakatInfo.isBelowNisab && (
         <Alert>
           <AlertCircle className="h-4 w-4" />
@@ -189,9 +196,7 @@ export default function DashboardPage() {
         </Alert>
       )}
 
-      {/* Main Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Zakat Summary */}
         <Card className="lg:col-span-2 p-6 progress-card">
           <div className="space-y-6">
             <div className="flex items-center justify-between">
@@ -232,7 +237,6 @@ export default function DashboardPage() {
           </div>
         </Card>
 
-        {/* Recent Payments */}
         <Card className="p-6 recent-payments">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
@@ -273,7 +277,6 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      {/* Asset Summary Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 asset-summary">
         <Card className="p-4">
           <div className="flex justify-between">
@@ -324,7 +327,6 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      {/* Zakat Charities */}
       <div className="zakat-charities">
         <ZakatCharities />
       </div>

@@ -6,7 +6,7 @@ import Footer from "@/components/layout/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "ZakTrak - Zakat Tracking Made Easy",
+  title: "ZakTrak",
   description: "Track and manage your Zakat obligations with ease",
 };
 

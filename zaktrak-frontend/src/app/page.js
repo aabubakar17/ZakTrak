@@ -11,7 +11,7 @@ export default function Home() {
         {/* Background gradient */}
         <div className="absolute inset-x-0 top-0 h-[160vh] bg-gradient-to-b from-emerald-50 via-emerald-50/50 to-transparent" />
 
-        <HeroScrollDemo />
+        <Hero />
         <Features />
       </div>
     </>

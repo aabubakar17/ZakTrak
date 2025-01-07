@@ -96,7 +96,7 @@ The backend API provides endpoints for:
 
 ### Future Development
 
-Mobile App Expansion
-Include Liabilities
-Expanded Asset Coverage
-Stocks and Shares Integration
+- Mobile App Expansion
+- Include Liabilities
+- Expanded Asset Coverage
+- Stocks and Shares Integration

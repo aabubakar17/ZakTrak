@@ -1,7 +1,7 @@
 # ZakTrak - Zakat Management App
 ![ZakTrak Logo](zaktrak-frontend/public/ZakTrak-logo.png)
 ## Overview
-ZakTrak is a comprehensive Zakat management application designed to simplify the process of calculating, tracking, and fulfilling Zakat obligations for modern Muslims. 
+ZakTrak is a comprehensive Zakat management application designed to simplify the calculation, tracking, and fulfilment of Zakat obligations for Muslims. 
 
 🔗 <a href="https://zak-trak.vercel.app/" target="_blank">Visit ZakTrak</a>  
 📊 <a href="https://docs.google.com/presentation/d/e/2PACX-1vTjmMoNjGvO321FD4nrA-B7i0n7BQUObUOhSyZeXyItMcTULZeFyYAN8rhprbZI0yAw3qzpSwO46ty9/pub?start=false&loop=false&delayms=60000" target="_blank">View Presentation</a>
@@ -17,10 +17,10 @@ In today's complex financial landscape, calculating Zakat accurately has become 
 
 ### Asset Management
 - Track multiple asset categories:
- - Cash and Savings
- - Investments
- - Gold and Silver
- - Business Assets
+  - Cash and Savings
+  - Investments
+  - Gold and Silver
+  - Business Assets
 
 ### Zakat Calculation
 - Automated calculations based on current Nisab thresholds
@@ -30,11 +30,10 @@ In today's complex financial landscape, calculating Zakat accurately has become 
 ### Payment Tracking
 - Record and monitor Zakat payments
 - Track progress towards total obligation
-- Payment history and reporting
+- Payment history 
 
 ### User Experience
 - Intuitive dashboard interface
-- Mobile-responsive design
 - Multi-currency support
 - Secure authentication
 
